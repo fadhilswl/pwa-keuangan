@@ -1,4 +1,4 @@
-const CACHE_NAME = "finance-rgb-v4"; 
+const CACHE_NAME = "finance-shuffle-v5"; 
 const ASSETS = [ "./", "./index.html", "./style.css", "./script.js", "./manifest.json" ];
 
 self.addEventListener("install", (e) => {

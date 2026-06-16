@@ -1,6 +1,6 @@
 // ====== KONFIGURASI ======
 // TEMPEL URL WEB APP DARI TAHAP 2 DI BAWAH INI
-const GAS_URL = "MASUKKAN_URL_WEB_APP_ANDA_DISINI";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwZ-QBcjXhauPXpKVyyMfAfWln9P_j_woWeMPzf6E0gI8QMfanJKJ3nlK5Xw9-qDmN73g/exec";
 
 // Kategori Data
 const categories = {

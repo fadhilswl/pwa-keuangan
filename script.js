@@ -75,7 +75,6 @@ const submitBtn = document.getElementById('submitBtn');
 const filterBulan = document.getElementById('filterBulan');
 const walletContainer = document.getElementById('walletContainer');
 
-// Set Tanggal Default Real-time
 const now = new Date();
 const todayStr = now.toISOString().split('T')[0];
 document.getElementById('tanggal').value = todayStr;
@@ -165,9 +164,53 @@ function calculateBalances() {
   appWallets.forEach(w => {
     const typeClass = w.toLowerCase() === 'cash' ? 'cash' : (w.toLowerCase() === 'bank' ? 'bank' : 'custom');
     const div = document.createElement('div'); div.className = `wallet-card ${typeClass}`;
-    div.innerHTML = `<p>${w}</p><h3>${formatRp(saldoMap[w] || 0)}</h3>`; walletContainer.appendChild(div);
+    div.innerHTML = `
+      <div class="wallet-header">
+        <p>${w}</p>
+        <span class="edit-icon" onclick="editSaldo('${w}', ${saldoMap[w] || 0})" title="Edit Saldo Aktual">✏️</span>
+      </div>
+      <h3>${formatRp(saldoMap[w] || 0)}</h3>
+    `; 
+    walletContainer.appendChild(div);
   });
 }
+
+// LOGIKA EDIT SALDO MANUAL
+window.editSaldo = async function(walletName, currentSaldo) {
+  const input = prompt(`Sesuaikan Saldo [${walletName}]\nSaldo tercatat: ${formatRp(currentSaldo)}\nMasukkan jumlah saldo aktual yang ada di tangan/bank saat ini:`, currentSaldo);
+  if (input === null || input === "") return;
+
+  const targetSaldo = Number(input);
+  if (isNaN(targetSaldo)) return alert("Masukkan angka yang valid!");
+
+  const selisih = targetSaldo - currentSaldo;
+  if (selisih === 0) return; // Tidak ada perubahan
+
+  const tipe = selisih > 0 ? "Pemasukan" : "Pengeluaran";
+  const jumlah = Math.abs(selisih);
+
+  document.getElementById('loading').style.display = "block";
+  try {
+    await fetch(GAS_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        action: "insert",
+        Tanggal: new Date().toISOString().split('T')[0], // Gunakan hari ini
+        Tipe: tipe,
+        Kategori: "Penyesuaian Saldo",
+        Dompet: walletName,
+        Jumlah: jumlah,
+        Keterangan: "Penyesuaian saldo manual via Edit Ikon"
+      }),
+      headers: { "Content-Type": "text/plain;charset=utf-8" }
+    });
+    playSound('success');
+    fetchDatabase();
+  } catch (err) {
+    alert("Gagal memperbarui saldo.");
+    document.getElementById('loading').style.display = "none";
+  }
+};
 
 async function fetchDatabase() {
   document.getElementById('loading').style.display = "block";
@@ -245,7 +288,6 @@ function buildChart(canvasId, dataObj, instance, setInst) {
   setInst(chart);
 }
 
-// UPDATE: Form mengirimkan payload 'Tanggal'
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const tipe = document.querySelector('input[name="tipe"]:checked').value;
@@ -261,7 +303,7 @@ form.addEventListener('submit', async (e) => {
       method: "POST",
       body: JSON.stringify({ 
         action: "insert", 
-        Tanggal: document.getElementById('tanggal').value, // Payload Baru
+        Tanggal: document.getElementById('tanggal').value, 
         Tipe: tipe, 
         Kategori: document.getElementById('kategori').value, 
         Dompet: dompetVal, 
@@ -272,7 +314,6 @@ form.addEventListener('submit', async (e) => {
     });
     playSound('success'); 
     form.reset(); 
-    // Set ulang tanggal ke hari ini setelah disubmit
     document.getElementById('tanggal').value = new Date().toISOString().split('T')[0];
     updateDropdownOptions(); 
     fetchDatabase();

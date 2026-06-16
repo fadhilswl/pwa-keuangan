@@ -69,7 +69,7 @@
         </div>
       </div>
 
-      <div id="loading" style="display:none; text-align:center; color: var(--text-muted); margin: 10px 0;">Memuat data...</div>
+      <div id="loading" style="display:none; text-align:center; color: var(--text-main); opacity: 0.7; margin: 10px 0;">Memuat data...</div>
       <div class="chart-container">
         <div><h3 class="chart-title">Pengeluaran</h3><canvas id="expenseChart"></canvas></div>
         <div><h3 class="chart-title">Pemasukan</h3><canvas id="incomeChart"></canvas></div>
@@ -93,7 +93,18 @@
           <input type="text" id="cardHexInput" placeholder="#161824" maxlength="7">
         </div>
       </div>
-      <button class="btn-small" onclick="resetTheme()" style="width: 100%; background: var(--accent-red); margin-bottom: 20px; padding: 12px;">Reset Warna Default</button>
+      <div class="form-group">
+        <label>Warna Teks Utama</label>
+        <div class="inline-form">
+          <input type="color" id="textColorPicker" class="color-picker-input">
+          <input type="text" id="textHexInput" placeholder="#ffffff" maxlength="7">
+        </div>
+      </div>
+
+      <div class="action-buttons" style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <button class="btn-small" onclick="shuffleTheme()" style="flex: 1; background: var(--accent-blue); padding: 12px;">🎲 Shuffle Warna</button>
+        <button class="btn-small" onclick="resetTheme()" style="flex: 1; background: var(--accent-red); padding: 12px;">Reset Default</button>
+      </div>
       
       <hr style="border: 1px solid var(--border-color); margin: 15px 0;">
 
@@ -106,7 +117,7 @@
             <option value="Transfer">Transfer</option>
           </select>
           <input type="text" id="newKatName" placeholder="Nama Kategori">
-          <button type="button" class="btn-small" onclick="tambahKategori()">+</button>
+          <button type="button" class="btn-small" onclick="tambahKategori()" style="background: var(--primary);">+</button>
         </div>
         <div class="manage-list" id="manageKatList"></div>
       </div>
@@ -117,7 +128,7 @@
         <label>Kelola Dompet</label>
         <div class="inline-form">
           <input type="text" id="newWalletName" placeholder="Nama Dompet">
-          <button type="button" class="btn-small" onclick="tambahDompet()">+</button>
+          <button type="button" class="btn-small" onclick="tambahDompet()" style="background: var(--primary);">+</button>
         </div>
         <div class="manage-list" id="manageWalletList"></div>
       </div>

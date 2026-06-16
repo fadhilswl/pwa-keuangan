@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catatan Keuangan</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>💰 Catatan Keuangan</h1>
+    </header>
+
+    <section class="card form-section">
+      <h2>Tambah Transaksi</h2>
+      <form id="txForm">
+        <div class="form-group">
+          <label>Tipe Transaksi</label>
+          <div class="radio-group">
+            <label><input type="radio" name="tipe" value="Pengeluaran" checked> Pengeluaran</label>
+            <label><input type="radio" name="tipe" value="Pemasukan"> Pemasukan</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="kategori">Kategori</label>
+          <select id="kategori" required></select>
+        </div>
+
+        <div class="form-group">
+          <label for="dompet">Dompet / Akun</label>
+          <select id="dompet" required>
+            <option value="Cash">Cash (Uang Tunai)</option>
+            <option value="Bank Jago">Bank Jago</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="jumlah">Jumlah (Rp)</label>
+          <input type="number" id="jumlah" placeholder="Contoh: 50000" required>
+        </div>
+
+        <div class="form-group">
+          <label for="keterangan">Keterangan (Opsional)</label>
+          <input type="text" id="keterangan" placeholder="Contoh: Beli makan siang">
+        </div>
+
+        <button type="submit" id="submitBtn">Simpan Transaksi</button>
+      </form>
+    </section>
+
+    <section class="card chart-section">
+      <h2>Analisis Bulan Ini</h2>
+      <div id="loading" style="display:none; text-align:center;">Memuat data...</div>
+      <div class="chart-container">
+        <div>
+          <h3>Pengeluaran</h3>
+          <canvas id="expenseChart"></canvas>
+        </div>
+        <div>
+          <h3>Pemasukan</h3>
+          <canvas id="incomeChart"></canvas>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+:root {
+  --bg-color: #f4f7f6;
+  --primary: #2c3e50;
+  --accent: #27ae60;
+  --danger: #e74c3c;
+  --card-bg: #ffffff;
+  --text: #333333;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background-color: var(--bg-color); color: var(--text); line-height: 1.6; }
+.container { max-width: 600px; margin: 0 auto; padding: 20px; }
+
+header { text-align: center; margin-bottom: 20px; color: var(--primary); }
+.card { background: var(--card-bg); padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
+
+.form-group { margin-bottom: 15px; }
+label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; }
+.radio-group { display: flex; gap: 15px; }
+input[type="text"], input[type="number"], select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; }
+
+button { width: 100%; padding: 12px; background-color: var(--accent); color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+button:hover { background-color: #219653; }
+button:disabled { background-color: #95a5a6; cursor: not-allowed; }
+
+.chart-container { display: flex; flex-direction: column; gap: 30px; margin-top: 15px; }
+.chart-container h3 { text-align: center; font-size: 16px; margin-bottom: 10px; color: #555; }
+canvas { max-height: 250px; }

@@ -80,14 +80,21 @@
       <div class="card-header">⚙️ Kelola Kustomisasi</div>
       
       <div class="form-group">
-        <label>Pilih Tema Aplikasi</label>
-        <div class="theme-selector">
-          <button class="theme-btn theme-dark" onclick="setTheme('dark')" title="Dark Mode"></button>
-          <button class="theme-btn theme-light" onclick="setTheme('light')" title="Light Mode"></button>
-          <button class="theme-btn theme-blue" onclick="setTheme('blue')" title="Midnight Blue"></button>
-          <button class="theme-btn theme-purple" onclick="setTheme('purple')" title="Deep Purple"></button>
+        <label>Warna Latar (Background)</label>
+        <div class="inline-form">
+          <input type="color" id="bgColorPicker" class="color-picker-input">
+          <input type="text" id="bgHexInput" placeholder="#0d0e15" maxlength="7">
         </div>
       </div>
+      <div class="form-group">
+        <label>Warna Kotak (Card)</label>
+        <div class="inline-form">
+          <input type="color" id="cardColorPicker" class="color-picker-input">
+          <input type="text" id="cardHexInput" placeholder="#161824" maxlength="7">
+        </div>
+      </div>
+      <button class="btn-small" onclick="resetTheme()" style="width: 100%; background: var(--accent-red); margin-bottom: 20px; padding: 12px;">Reset Warna Default</button>
+      
       <hr style="border: 1px solid var(--border-color); margin: 15px 0;">
 
       <div class="form-group">
@@ -103,7 +110,9 @@
         </div>
         <div class="manage-list" id="manageKatList"></div>
       </div>
+      
       <hr style="border: 1px solid var(--border-color); margin: 15px 0;">
+      
       <div class="form-group">
         <label>Kelola Dompet</label>
         <div class="inline-form">

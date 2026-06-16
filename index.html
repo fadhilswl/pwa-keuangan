@@ -14,6 +14,20 @@
       <h1>💰 Catatan Keuangan</h1>
     </header>
 
+    <section class="card summary-section">
+      <h2>Saldo Saat Ini</h2>
+      <div class="wallet-balances">
+        <div class="wallet-card">
+          <p>Cash</p>
+          <h3 id="saldoCash">Rp 0</h3>
+        </div>
+        <div class="wallet-card">
+          <p>Bank Jago</p>
+          <h3 id="saldoJago">Rp 0</h3>
+        </div>
+      </div>
+    </section>
+
     <section class="card form-section">
       <h2>Tambah Transaksi</h2>
       <form id="txForm">
@@ -22,6 +36,7 @@
           <div class="radio-group">
             <label><input type="radio" name="tipe" value="Pengeluaran" checked> Pengeluaran</label>
             <label><input type="radio" name="tipe" value="Pemasukan"> Pemasukan</label>
+            <label><input type="radio" name="tipe" value="Transfer"> Transfer</label>
           </div>
         </div>
 
@@ -31,10 +46,18 @@
         </div>
 
         <div class="form-group">
-          <label for="dompet">Dompet / Akun</label>
+          <label id="labelDompetDari" for="dompet">Dompet / Akun</label>
           <select id="dompet" required>
             <option value="Cash">Cash (Uang Tunai)</option>
             <option value="Bank Jago">Bank Jago</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="transferGroup" style="display: none;">
+          <label for="dompetKe">Ke Dompet</label>
+          <select id="dompetKe">
+            <option value="Bank Jago">Bank Jago</option>
+            <option value="Cash">Cash (Uang Tunai)</option>
           </select>
         </div>
 
@@ -52,9 +75,17 @@
       </form>
     </section>
 
+    <section class="card filter-section">
+      <h2>Laporan Bulanan</h2>
+      <div class="form-group">
+        <label for="filterBulan">Pilih Bulan & Tahun:</label>
+        <input type="month" id="filterBulan">
+      </div>
+    </section>
+
+    <div id="loading" style="display:none; text-align:center; margin-bottom:15px;">Memuat data...</div>
+
     <section class="card chart-section">
-      <h2>Analisis Bulan Ini</h2>
-      <div id="loading" style="display:none; text-align:center;">Memuat data...</div>
       <div class="chart-container">
         <div>
           <h3>Pengeluaran</h3>
@@ -64,6 +95,26 @@
           <h3>Pemasukan</h3>
           <canvas id="incomeChart"></canvas>
         </div>
+      </div>
+    </section>
+
+    <section class="card history-section">
+      <h2>Riwayat Transaksi</h2>
+      <div class="table-responsive">
+        <table id="historyTable">
+          <thead>
+            <tr>
+              <th>Tanggal</th>
+              <th>Tipe</th>
+              <th>Dompet</th>
+              <th>Kategori</th>
+              <th>Jumlah</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody">
+            </tbody>
+        </table>
       </div>
     </section>
   </div>

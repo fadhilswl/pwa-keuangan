@@ -1,7 +1,7 @@
 // ====== GANTI URL INI ======
 const GAS_URL = "https://script.google.com/macros/s/AKfycbwZ-QBcjXhauPXpKVyyMfAfWln9P_j_woWeMPzf6E0gI8QMfanJKJ3nlK5Xw9-qDmN73g/exec";
 
-// ====== THEME MANAGEMENT (RGB, HEX & SHUFFLE ENGINE) ======
+// ====== THEME MANAGEMENT ======
 function updateColor(type, hexVal) {
   if (/^#[0-9A-F]{6}$/i.test(hexVal)) {
     if (type === 'bg') {
@@ -23,7 +23,6 @@ function updateColor(type, hexVal) {
   }
 }
 
-// Live Update Listeners
 document.getElementById('bgColorPicker').addEventListener('input', e => updateColor('bg', e.target.value));
 document.getElementById('bgHexInput').addEventListener('input', e => updateColor('bg', e.target.value));
 document.getElementById('cardColorPicker').addEventListener('input', e => updateColor('card', e.target.value));
@@ -31,38 +30,28 @@ document.getElementById('cardHexInput').addEventListener('input', e => updateCol
 document.getElementById('textColorPicker').addEventListener('input', e => updateColor('text', e.target.value));
 document.getElementById('textHexInput').addEventListener('input', e => updateColor('text', e.target.value));
 
-// Database Palet Estetik yang Dijamin Kontras
 const aestheticPalettes = [
-  { bg: '#0d0e15', card: '#161824', text: '#ffffff' }, // Original Dark
-  { bg: '#f4f7f6', card: '#ffffff', text: '#2d3436' }, // Clean Light
-  { bg: '#ffeaa7', card: '#fdcb6e', text: '#2d3436' }, // Warm Yellow
-  { bg: '#2b213a', card: '#3d2e53', text: '#f1e8e6' }, // Deep Purple
-  { bg: '#002b36', card: '#073642', text: '#93a1a1' }, // Solarized Dark
-  { bg: '#1e272e', card: '#485460', text: '#d2dae2' }, // Midnight Steel
-  { bg: '#fc5c65', card: '#eb3b5a', text: '#ffffff' }, // Pastel Red
-  { bg: '#10ac84', card: '#01a3a4', text: '#ffffff' }, // Aqua Mint
-  { bg: '#ff9ff3', card: '#f368e0', text: '#ffffff' }, // Neon Pink
-  { bg: '#2c3e50', card: '#34495e', text: '#ecf0f1' }  // Flat Blue
+  { bg: '#0d0e15', card: '#161824', text: '#ffffff' },
+  { bg: '#f4f7f6', card: '#ffffff', text: '#2d3436' },
+  { bg: '#ffeaa7', card: '#fdcb6e', text: '#2d3436' },
+  { bg: '#2b213a', card: '#3d2e53', text: '#f1e8e6' },
+  { bg: '#002b36', card: '#073642', text: '#93a1a1' },
+  { bg: '#1e272e', card: '#485460', text: '#d2dae2' },
+  { bg: '#fc5c65', card: '#eb3b5a', text: '#ffffff' },
+  { bg: '#10ac84', card: '#01a3a4', text: '#ffffff' },
+  { bg: '#ff9ff3', card: '#f368e0', text: '#ffffff' },
+  { bg: '#2c3e50', card: '#34495e', text: '#ecf0f1' } 
 ];
 
 window.shuffleTheme = function() {
   const random = aestheticPalettes[Math.floor(Math.random() * aestheticPalettes.length)];
-  updateColor('bg', random.bg);
-  updateColor('card', random.card);
-  updateColor('text', random.text);
+  updateColor('bg', random.bg); updateColor('card', random.card); updateColor('text', random.text);
 }
+window.resetTheme = function() { updateColor('bg', '#0d0e15'); updateColor('card', '#161824'); updateColor('text', '#ffffff'); }
 
-window.resetTheme = function() {
-  updateColor('bg', '#0d0e15');
-  updateColor('card', '#161824');
-  updateColor('text', '#ffffff');
-}
-
-// Inisialisasi Tema
 updateColor('bg', localStorage.getItem('appBgColor') || '#0d0e15');
 updateColor('card', localStorage.getItem('appCardColor') || '#161824');
 updateColor('text', localStorage.getItem('appTextColor') || '#ffffff');
-
 
 // ====== STATE MANAGEMENT ======
 let appCategories = JSON.parse(localStorage.getItem('appCategories')) || {
@@ -75,9 +64,7 @@ let appWallets = JSON.parse(localStorage.getItem('appWallets')) || ["Cash", "Ban
 function saveConfig() {
   localStorage.setItem('appCategories', JSON.stringify(appCategories));
   localStorage.setItem('appWallets', JSON.stringify(appWallets));
-  updateDropdownOptions();
-  renderManageLists();
-  if (allData.length > 0) calculateBalances();
+  updateDropdownOptions(); renderManageLists(); if (allData.length > 0) calculateBalances();
 }
 
 let allData = [];
@@ -88,7 +75,10 @@ const submitBtn = document.getElementById('submitBtn');
 const filterBulan = document.getElementById('filterBulan');
 const walletContainer = document.getElementById('walletContainer');
 
+// Set Tanggal Default Real-time
 const now = new Date();
+const todayStr = now.toISOString().split('T')[0];
+document.getElementById('tanggal').value = todayStr;
 filterBulan.value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
 
 const formatRp = (angka) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
@@ -112,24 +102,18 @@ function updateDropdownOptions() {
   const tipe = document.querySelector('input[name="tipe"]:checked').value;
   const katSelect = document.getElementById('kategori');
   katSelect.innerHTML = "";
-  (appCategories[tipe] || []).forEach(k => {
-    const opt = document.createElement('option'); opt.value = k; opt.textContent = k; katSelect.appendChild(opt);
-  });
+  (appCategories[tipe] || []).forEach(k => { const opt = document.createElement('option'); opt.value = k; opt.textContent = k; katSelect.appendChild(opt); });
 
   const dompetSelect = document.getElementById('dompet');
   dompetSelect.innerHTML = "";
-  appWallets.forEach(w => {
-    const opt = document.createElement('option'); opt.value = w; opt.textContent = w; dompetSelect.appendChild(opt);
-  });
+  appWallets.forEach(w => { const opt = document.createElement('option'); opt.value = w; opt.textContent = w; dompetSelect.appendChild(opt); });
 
   const transferGroup = document.getElementById('transferGroup');
   const dompetKeSelect = document.getElementById('dompetKe');
   if (tipe === "Transfer") {
     transferGroup.style.display = "block"; document.getElementById('labelDompetDari').textContent = "Dari Dompet";
     dompetKeSelect.innerHTML = "";
-    appWallets.forEach(w => {
-      const opt = document.createElement('option'); opt.value = w; opt.textContent = w; dompetKeSelect.appendChild(opt);
-    });
+    appWallets.forEach(w => { const opt = document.createElement('option'); opt.value = w; opt.textContent = w; dompetKeSelect.appendChild(opt); });
   } else {
     transferGroup.style.display = "none"; document.getElementById('labelDompetDari').textContent = "Dompet";
   }
@@ -236,7 +220,6 @@ function renderFilteredReport() {
 
   document.getElementById('repIncome').textContent = formatRp(totalIncome);
   document.getElementById('repExpense').textContent = formatRp(totalExpense);
-  
   const totalSisa = totalIncome - totalExpense;
   const elTotal = document.getElementById('repTotal');
   elTotal.textContent = formatRp(totalSisa);
@@ -262,6 +245,7 @@ function buildChart(canvasId, dataObj, instance, setInst) {
   setInst(chart);
 }
 
+// UPDATE: Form mengirimkan payload 'Tanggal'
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const tipe = document.querySelector('input[name="tipe"]:checked').value;
@@ -275,10 +259,23 @@ form.addEventListener('submit', async (e) => {
   try {
     await fetch(GAS_URL, {
       method: "POST",
-      body: JSON.stringify({ action: "insert", Tipe: tipe, Kategori: document.getElementById('kategori').value, Dompet: dompetVal, Jumlah: document.getElementById('jumlah').value, Keterangan: document.getElementById('keterangan').value }),
+      body: JSON.stringify({ 
+        action: "insert", 
+        Tanggal: document.getElementById('tanggal').value, // Payload Baru
+        Tipe: tipe, 
+        Kategori: document.getElementById('kategori').value, 
+        Dompet: dompetVal, 
+        Jumlah: document.getElementById('jumlah').value, 
+        Keterangan: document.getElementById('keterangan').value 
+      }),
       headers: { "Content-Type": "text/plain;charset=utf-8" }
     });
-    playSound('success'); form.reset(); updateDropdownOptions(); fetchDatabase();
+    playSound('success'); 
+    form.reset(); 
+    // Set ulang tanggal ke hari ini setelah disubmit
+    document.getElementById('tanggal').value = new Date().toISOString().split('T')[0];
+    updateDropdownOptions(); 
+    fetchDatabase();
   } catch(err) { alert("Gagal menyimpan data."); }
   submitBtn.disabled = false;
 });

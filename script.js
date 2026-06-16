@@ -1,265 +1,90 @@
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwZ-QBcjXhauPXpKVyyMfAfWln9P_j_woWeMPzf6E0gI8QMfanJKJ3nlK5Xw9-qDmN73g/exec";
-
-// ====== THEME MANAGEMENT (RGB & HEX ENGINE) ======
-function updateColor(type, hexVal) {
-  if (/^#[0-9A-F]{6}$/i.test(hexVal)) {
-    if (type === 'bg') {
-      document.documentElement.style.setProperty('--bg-color', hexVal);
-      document.getElementById('bgColorPicker').value = hexVal;
-      document.getElementById('bgHexInput').value = hexVal;
-      localStorage.setItem('appBgColor', hexVal);
-    } else if (type === 'card') {
-      document.documentElement.style.setProperty('--card-bg', hexVal);
-      document.getElementById('cardColorPicker').value = hexVal;
-      document.getElementById('cardHexInput').value = hexVal;
-      localStorage.setItem('appCardColor', hexVal);
-    }
-  }
+/* VARIABEL TEMA DINAMIS DASAR */
+:root {
+  --bg-color: #0d0e15;
+  --card-bg: #161824;
+  --text-main: #ffffff;
+  --primary: #6c5ce7;
+  --pink-wallet: #ff79c6;
+  --orange-wallet: #ff9f43;
+  --default-wallet: #a55eea;
+  --accent-green: #2ed573;
+  --accent-red: #ff4757;
+  --accent-yellow: #f1c40f;
+  --accent-blue: #54a0ff;
+  --border-color: rgba(128, 128, 128, 0.2);
+  --input-bg: rgba(0, 0, 0, 0.15);
 }
 
-// Event Listeners untuk sinkronisasi Picker dan Input Teks secara Real-time
-document.getElementById('bgColorPicker').addEventListener('input', e => updateColor('bg', e.target.value));
-document.getElementById('bgHexInput').addEventListener('input', e => updateColor('bg', e.target.value));
-document.getElementById('cardColorPicker').addEventListener('input', e => updateColor('card', e.target.value));
-document.getElementById('cardHexInput').addEventListener('input', e => updateColor('card', e.target.value));
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Fredoka', sans-serif; transition: background-color 0.4s, color 0.4s; }
+body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; padding-bottom: 40px; }
+.container { max-width: 600px; margin: 0 auto; padding: 16px; }
 
-window.resetTheme = function() {
-  updateColor('bg', '#0d0e15');
-  updateColor('card', '#161824');
-}
+header { text-align: center; margin: 20px 0 25px 0; }
+header h1 { font-size: 32px; font-weight: 700; letter-spacing: 1px; color: var(--pink-wallet); text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
 
-// Load Theme saat aplikasi dibuka
-updateColor('bg', localStorage.getItem('appBgColor') || '#0d0e15');
-updateColor('card', localStorage.getItem('appCardColor') || '#161824');
+.wallet-container { display: flex; gap: 12px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
+.wallet-card { flex: 1; min-width: 140px; padding: 16px; border-radius: 16px; position: relative; display: block; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+.wallet-card.cash { background: linear-gradient(135deg, #2c1a24, #1a0f15); border: 2px solid var(--pink-wallet); color: white !important; }
+.wallet-card.bank { background: linear-gradient(135deg, #2c2016, #1a130d); border: 2px solid var(--orange-wallet); color: white !important; }
+.wallet-card.custom { background: linear-gradient(135deg, #1f1b2c, #13101c); border: 2px solid var(--default-wallet); color: white !important; }
+.wallet-card p { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; margin-bottom: 4px; color: white; }
+.wallet-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.wallet-card.cash h3 { color: var(--pink-wallet); }
+.wallet-card.bank h3 { color: var(--orange-wallet); }
+.wallet-card.custom h3 { color: var(--default-wallet); }
 
+.card { background: var(--card-bg); border: 2px solid var(--border-color); padding: 20px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); }
+.card-header { font-size: 16px; font-weight: 700; text-transform: uppercase; color: var(--text-main); margin-bottom: 15px; border-left: 4px solid var(--primary); padding-left: 10px; }
 
-// ====== STATE MANAGEMENT ======
-let appCategories = JSON.parse(localStorage.getItem('appCategories')) || {
-  Pengeluaran: ["Makan", "Dana Tambahan", "Transportasi", "Internet", "Sedekah", "Laundry", "Hobi", "Perawatan", "Kesehatan", "Pakaian", "Ortu"],
-  Pemasukan: ["Suami", "Rejeki"],
-  Transfer: ["Mutasi"]
-};
-let appWallets = JSON.parse(localStorage.getItem('appWallets')) || ["Cash", "Bank"];
+.form-group { margin-bottom: 16px; }
+label { display: block; font-size: 14px; color: var(--text-main); opacity: 0.8; margin-bottom: 6px; font-weight: 600; }
+.radio-group { display: flex; background: var(--input-bg); padding: 5px; border-radius: 12px; gap: 5px; border: 1px solid var(--border-color); }
+.radio-group label { flex: 1; text-align: center; margin: 0; padding: 10px; border-radius: 8px; cursor: pointer; color: var(--text-main); opacity: 0.7; font-size: 14px; font-weight: 600; transition: 0.3s; }
+.radio-group input { display: none; }
+.radio-group label:has(input:checked) { background: var(--primary); color: #fff; opacity: 1; box-shadow: 0 4px 8px rgba(108, 92, 231, 0.4); }
 
-function saveConfig() {
-  localStorage.setItem('appCategories', JSON.stringify(appCategories));
-  localStorage.setItem('appWallets', JSON.stringify(appWallets));
-  updateDropdownOptions();
-  renderManageLists();
-  if (allData.length > 0) calculateBalances();
-}
+input[type="text"], input[type="number"], input[type="month"], select { width: 100%; padding: 12px; background: var(--input-bg); border: 2px solid var(--border-color); border-radius: 12px; color: var(--text-main); font-size: 15px; font-weight: 500; }
+input:focus, select:focus { outline: none; border-color: var(--primary); }
+input::placeholder { color: var(--text-main); opacity: 0.4; }
 
-let allData = [];
-let expenseChartInstance = null;
-let incomeChartInstance = null;
-const form = document.getElementById('txForm');
-const submitBtn = document.getElementById('submitBtn');
-const filterBulan = document.getElementById('filterBulan');
-const walletContainer = document.getElementById('walletContainer');
+/* Khusus Color Picker */
+.color-picker-input { width: 60px !important; padding: 0 !important; border: none !important; border-radius: 12px; cursor: pointer; background: transparent; height: 48px; }
+.color-picker-input::-webkit-color-swatch-wrapper { padding: 0; }
+.color-picker-input::-webkit-color-swatch { border: 2px solid var(--border-color); border-radius: 12px; }
 
-const now = new Date();
-filterBulan.value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+button[type="submit"] { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3); }
 
-const formatRp = (angka) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
+/* Table & Full Row Colors */
+.table-responsive { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; font-weight: 500; }
+th { color: var(--text-main); opacity: 0.8; text-align: left; padding: 12px 10px; border-bottom: 2px solid var(--border-color); font-weight: 700; }
+td { padding: 14px 10px; border-bottom: 1px solid var(--border-color); }
 
-function playSound(type) {
-  const ctx = new (window.AudioContext || window.webkitAudioContext)();
-  const osc = ctx.createOscillator(); const gain = ctx.createGain();
-  osc.connect(gain); gain.connect(ctx.destination);
-  if (type === 'success') {
-    osc.frequency.setValueAtTime(587.33, ctx.currentTime); osc.frequency.setValueAtTime(880.00, ctx.currentTime + 0.08);
-    gain.gain.setValueAtTime(0.05, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
-    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.25);
-  } else if (type === 'delete') {
-    osc.frequency.setValueAtTime(220.00, ctx.currentTime); osc.frequency.setValueAtTime(146.83, ctx.currentTime + 0.1);
-    gain.gain.setValueAtTime(0.08, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
-    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.3);
-  }
-}
+/* PENGEKUALIAN WARNA FUNGSIONAL (Override Text Main) */
+tr.row-expense td { color: var(--accent-red) !important; font-weight: 600; }
+tr.row-income td { color: var(--accent-green) !important; font-weight: 600; }
+tr.row-transfer td { color: var(--accent-yellow) !important; font-weight: 600; }
+.text-green { color: var(--accent-green) !important; }
+.text-red { color: var(--accent-red) !important; }
 
-function updateDropdownOptions() {
-  const tipe = document.querySelector('input[name="tipe"]:checked').value;
-  const katSelect = document.getElementById('kategori');
-  katSelect.innerHTML = "";
-  (appCategories[tipe] || []).forEach(k => {
-    const opt = document.createElement('option'); opt.value = k; opt.textContent = k; katSelect.appendChild(opt);
-  });
+.delete-btn { border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-weight: 700; font-size: 12px; color: #fff !important; }
+tr.row-expense .delete-btn { background: var(--accent-red); }
+tr.row-income .delete-btn { background: var(--accent-green); }
+tr.row-transfer .delete-btn { background: var(--accent-yellow); color: #000 !important; }
 
-  const dompetSelect = document.getElementById('dompet');
-  dompetSelect.innerHTML = "";
-  appWallets.forEach(w => {
-    const opt = document.createElement('option'); opt.value = w; opt.textContent = w; dompetSelect.appendChild(opt);
-  });
+.report-summary { display: flex; gap: 10px; margin-bottom: 20px; text-align: center; }
+.summary-box { flex: 1; background: var(--input-bg); padding: 12px 8px; border-radius: 16px; border: 2px solid var(--border-color); }
+.summary-box p { font-size: 11px; color: var(--text-main); opacity: 0.8; font-weight: 700; text-transform: uppercase; margin-bottom: 5px; }
+.summary-box h4 { font-size: 15px; font-weight: 700; }
 
-  const transferGroup = document.getElementById('transferGroup');
-  const dompetKeSelect = document.getElementById('dompetKe');
-  if (tipe === "Transfer") {
-    transferGroup.style.display = "block"; document.getElementById('labelDompetDari').textContent = "Dari Dompet";
-    dompetKeSelect.innerHTML = "";
-    appWallets.forEach(w => {
-      const opt = document.createElement('option'); opt.value = w; opt.textContent = w; dompetKeSelect.appendChild(opt);
-    });
-  } else {
-    transferGroup.style.display = "none"; document.getElementById('labelDompetDari').textContent = "Dompet";
-  }
-}
-document.querySelectorAll('input[name="tipe"]').forEach(r => r.addEventListener('change', updateDropdownOptions));
+.chart-container { display: flex; flex-direction: column; gap: 25px; }
+.chart-title { text-align: center; font-size: 15px; font-weight: 600; color: var(--text-main); opacity: 0.8; margin-bottom: 5px; }
+canvas { max-height: 200px; }
 
-function renderManageLists() {
-  const tipeKat = document.getElementById('manageKatTipe').value;
-  const katListDiv = document.getElementById('manageKatList');
-  katListDiv.innerHTML = "";
-  (appCategories[tipeKat] || []).forEach((kat, index) => {
-    const badge = document.createElement('div'); badge.className = 'badge';
-    badge.innerHTML = `<span>${kat}</span> <button onclick="hapusKategori('${tipeKat}', ${index})">×</button>`; katListDiv.appendChild(badge);
-  });
-
-  const walletListDiv = document.getElementById('manageWalletList');
-  walletListDiv.innerHTML = "";
-  appWallets.forEach((w, index) => {
-    const badge = document.createElement('div'); badge.className = 'badge';
-    badge.innerHTML = `<span>${w}</span> <button onclick="hapusDompet(${index})">×</button>`; walletListDiv.appendChild(badge);
-  });
-}
-
-window.tambahKategori = function() {
-  const tipe = document.getElementById('manageKatTipe').value; const val = document.getElementById('newKatName').value.trim();
-  if (val && !appCategories[tipe].includes(val)) { appCategories[tipe].push(val); document.getElementById('newKatName').value = ""; saveConfig(); }
-}
-window.hapusKategori = function(tipe, index) { if (confirm("Hapus kategori ini?")) { appCategories[tipe].splice(index, 1); saveConfig(); } }
-window.tambahDompet = function() {
-  const val = document.getElementById('newWalletName').value.trim();
-  if (val && !appWallets.includes(val)) { appWallets.push(val); document.getElementById('newWalletName').value = ""; saveConfig(); }
-}
-window.hapusDompet = function(index) { if (confirm("Hapus dompet ini?")) { appWallets.splice(index, 1); saveConfig(); } }
-
-function calculateBalances() {
-  let saldoMap = {}; appWallets.forEach(w => saldoMap[w] = 0);
-  allData.forEach(row => {
-    const jml = Number(row.Jumlah);
-    if (row.Tipe === "Pemasukan" && saldoMap[row.Dompet] !== undefined) saldoMap[row.Dompet] += jml;
-    else if (row.Tipe === "Pengeluaran" && saldoMap[row.Dompet] !== undefined) saldoMap[row.Dompet] -= jml;
-    else if (row.Tipe === "Transfer") {
-      const [dari, ke] = row.Dompet.split(" -> ");
-      if (saldoMap[dari] !== undefined) saldoMap[dari] -= jml;
-      if (saldoMap[ke] !== undefined) saldoMap[ke] += jml;
-    }
-  });
-
-  walletContainer.innerHTML = "";
-  appWallets.forEach(w => {
-    const typeClass = w.toLowerCase() === 'cash' ? 'cash' : (w.toLowerCase() === 'bank' ? 'bank' : 'custom');
-    const div = document.createElement('div'); div.className = `wallet-card ${typeClass}`;
-    div.innerHTML = `<p>${w}</p><h3>${formatRp(saldoMap[w] || 0)}</h3>`; walletContainer.appendChild(div);
-  });
-}
-
-async function fetchDatabase() {
-  document.getElementById('loading').style.display = "block";
-  try {
-    const res = await fetch(GAS_URL); const json = await res.json();
-    if (json.status === "success") { allData = json.data; calculateBalances(); renderFilteredReport(); }
-  } catch (e) { console.error(e); }
-  document.getElementById('loading').style.display = "none";
-}
-
-function renderFilteredReport() {
-  const [fYear, fMonth] = filterBulan.value.split("-");
-  const filteredData = allData.filter(row => {
-    const d = new Date(row.Timestamp); return d.getFullYear() == fYear && (d.getMonth() + 1) == fMonth;
-  });
-
-  let totalIncome = 0; let totalExpense = 0;
-  let expData = {}, incData = {};
-
-  const tbody = document.getElementById('historyBody');
-  tbody.innerHTML = "";
-  
-  [...filteredData].reverse().forEach(row => {
-    const tr = document.createElement('tr');
-    const d = new Date(row.Timestamp);
-    
-    if(row.Tipe === "Pengeluaran") {
-      tr.className = "row-expense";
-      totalExpense += Number(row.Jumlah);
-      expData[row.Kategori] = (expData[row.Kategori] || 0) + Number(row.Jumlah);
-    } else if(row.Tipe === "Pemasukan") {
-      tr.className = "row-income";
-      totalIncome += Number(row.Jumlah);
-      incData[row.Kategori] = (incData[row.Kategori] || 0) + Number(row.Jumlah);
-    } else {
-      tr.className = "row-transfer";
-    }
-
-    tr.innerHTML = `
-      <td>${d.getDate()}/${d.getMonth()+1}</td>
-      <td>${row.Tipe}</td>
-      <td>${row.Dompet}</td>
-      <td>${row.Kategori}</td>
-      <td>${formatRp(row.Jumlah)}</td>
-      <td>${row.Keterangan || '-'}</td>
-      <td><button class="delete-btn" onclick="hapusRow(${row.rowNumber})">Hapus</button></td>
-    `;
-    tbody.appendChild(tr);
-  });
-
-  document.getElementById('repIncome').textContent = formatRp(totalIncome);
-  document.getElementById('repExpense').textContent = formatRp(totalExpense);
-  
-  const totalSisa = totalIncome - totalExpense;
-  const elTotal = document.getElementById('repTotal');
-  elTotal.textContent = formatRp(totalSisa);
-  elTotal.className = totalSisa < 0 ? 'text-red' : (totalSisa > 0 ? 'text-green' : '');
-
-  buildChart('expenseChart', expData, expenseChartInstance, inst => expenseChartInstance = inst);
-  buildChart('incomeChart', incData, incomeChartInstance, inst => incomeChartInstance = inst);
-}
-filterBulan.addEventListener('change', renderFilteredReport);
-
-function buildChart(canvasId, dataObj, instance, setInst) {
-  const ctx = document.getElementById(canvasId).getContext('2d');
-  if(instance) instance.destroy();
-  const labels = Object.keys(dataObj); const vals = Object.values(dataObj);
-  const chart = new Chart(ctx, {
-    type: 'pie',
-    data: {
-      labels: labels.length ? labels : ['Kosong'],
-      datasets: [{ data: vals.length ? vals : [1], backgroundColor: labels.length ? ['#ff4757', '#54a0ff', '#ff9f43', '#2ed573', '#9b59b6', '#ff79c6', '#1abc9c', '#f1c40f'] : ['#25283d'], borderWidth: 0 }]
-    },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: getComputedStyle(document.body).getPropertyValue('--text-main'), font: { family: 'Fredoka', size: 11 } } } } }
-  });
-  setInst(chart);
-}
-
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const tipe = document.querySelector('input[name="tipe"]:checked').value;
-  let dompetVal = document.getElementById('dompet').value;
-  if (tipe === "Transfer") {
-    const ke = document.getElementById('dompetKe').value;
-    if (dompetVal === ke) return alert("Dompet asal dan tujuan tidak boleh sama!");
-    dompetVal = `${dompetVal} -> ${ke}`;
-  }
-  submitBtn.disabled = true;
-  try {
-    await fetch(GAS_URL, {
-      method: "POST",
-      body: JSON.stringify({ action: "insert", Tipe: tipe, Kategori: document.getElementById('kategori').value, Dompet: dompetVal, Jumlah: document.getElementById('jumlah').value, Keterangan: document.getElementById('keterangan').value }),
-      headers: { "Content-Type": "text/plain;charset=utf-8" }
-    });
-    playSound('success'); form.reset(); updateDropdownOptions(); fetchDatabase();
-  } catch(err) { alert("Gagal menyimpan data."); }
-  submitBtn.disabled = false;
-});
-
-window.hapusRow = async function(rowNumber) {
-  if(!confirm("Hapus data transaksi ini?")) return;
-  try {
-    document.getElementById('loading').style.display = "block";
-    await fetch(GAS_URL, { method: "POST", body: JSON.stringify({ action: "delete", rowNumber: rowNumber }), headers: { "Content-Type": "text/plain;charset=utf-8" } });
-    playSound('delete'); fetchDatabase();
-  } catch(e) { alert("Gagal menghapus."); }
-};
-
-// INIT
-updateDropdownOptions(); renderManageLists(); fetchDatabase();
+.inline-form { display: flex; gap: 8px; margin-bottom: 10px; }
+.inline-form input, .inline-form select { flex: 1; padding: 10px; font-size: 14px; }
+.btn-small { border: none; color: #fff; border-radius: 10px; font-weight: 700; font-size: 16px; cursor: pointer; }
+.settings-card { border-style: dashed; background: transparent; }
+.manage-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.badge { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+.badge button { background: var(--accent-red); color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer; font-weight: bold; }

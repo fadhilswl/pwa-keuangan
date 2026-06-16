@@ -1,13 +1,37 @@
 const GAS_URL = "https://script.google.com/macros/s/AKfycbwZ-QBcjXhauPXpKVyyMfAfWln9P_j_woWeMPzf6E0gI8QMfanJKJ3nlK5Xw9-qDmN73g/exec";
 
-// ====== THEME MANAGEMENT ======
-function setTheme(themeName) {
-  document.body.setAttribute('data-theme', themeName);
-  localStorage.setItem('appTheme', themeName);
+// ====== THEME MANAGEMENT (RGB & HEX ENGINE) ======
+function updateColor(type, hexVal) {
+  if (/^#[0-9A-F]{6}$/i.test(hexVal)) {
+    if (type === 'bg') {
+      document.documentElement.style.setProperty('--bg-color', hexVal);
+      document.getElementById('bgColorPicker').value = hexVal;
+      document.getElementById('bgHexInput').value = hexVal;
+      localStorage.setItem('appBgColor', hexVal);
+    } else if (type === 'card') {
+      document.documentElement.style.setProperty('--card-bg', hexVal);
+      document.getElementById('cardColorPicker').value = hexVal;
+      document.getElementById('cardHexInput').value = hexVal;
+      localStorage.setItem('appCardColor', hexVal);
+    }
+  }
 }
+
+// Event Listeners untuk sinkronisasi Picker dan Input Teks secara Real-time
+document.getElementById('bgColorPicker').addEventListener('input', e => updateColor('bg', e.target.value));
+document.getElementById('bgHexInput').addEventListener('input', e => updateColor('bg', e.target.value));
+document.getElementById('cardColorPicker').addEventListener('input', e => updateColor('card', e.target.value));
+document.getElementById('cardHexInput').addEventListener('input', e => updateColor('card', e.target.value));
+
+window.resetTheme = function() {
+  updateColor('bg', '#0d0e15');
+  updateColor('card', '#161824');
+}
+
 // Load Theme saat aplikasi dibuka
-const savedTheme = localStorage.getItem('appTheme') || 'dark';
-setTheme(savedTheme);
+updateColor('bg', localStorage.getItem('appBgColor') || '#0d0e15');
+updateColor('card', localStorage.getItem('appCardColor') || '#161824');
+
 
 // ====== STATE MANAGEMENT ======
 let appCategories = JSON.parse(localStorage.getItem('appCategories')) || {
@@ -145,7 +169,6 @@ function renderFilteredReport() {
     const d = new Date(row.Timestamp); return d.getFullYear() == fYear && (d.getMonth() + 1) == fMonth;
   });
 
-  // Kalkulasi Summary Laporan
   let totalIncome = 0; let totalExpense = 0;
   let expData = {}, incData = {};
 
@@ -156,7 +179,6 @@ function renderFilteredReport() {
     const tr = document.createElement('tr');
     const d = new Date(row.Timestamp);
     
-    // Pewarnaan Baris Penuh Berdasar Tipe
     if(row.Tipe === "Pengeluaran") {
       tr.className = "row-expense";
       totalExpense += Number(row.Jumlah);
@@ -181,7 +203,6 @@ function renderFilteredReport() {
     tbody.appendChild(tr);
   });
 
-  // Render Angka Summary Laporan
   document.getElementById('repIncome').textContent = formatRp(totalIncome);
   document.getElementById('repExpense').textContent = formatRp(totalExpense);
   

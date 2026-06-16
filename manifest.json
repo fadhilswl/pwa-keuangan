@@ -5,12 +5,13 @@
   "display": "standalone",
   "background_color": "#0d0e15",
   "theme_color": "#161824",
-  "description": "Premium Finance App with Theme Shuffler",
+  "description": "Premium Finance App with Money Emoji",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+      "src": "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤑</text></svg>",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ]
 }

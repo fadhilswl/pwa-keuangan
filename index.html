@@ -6,6 +6,8 @@
   <title>FI.nance ❤️💰</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
+  <!-- Font Lucu & Bold dari Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -14,8 +16,10 @@
       <h1>FI.nance ❤️💰</h1>
     </header>
 
+    <!-- SECTION 1: WALLET BALANCES -->
     <section class="wallet-container" id="walletContainer"></section>
 
+    <!-- SECTION 2: TAMBAH TRANSAKSI -->
     <section class="card">
       <div class="card-header">Tambah Transaksi</div>
       <form id="txForm">
@@ -56,6 +60,7 @@
       </form>
     </section>
 
+    <!-- SECTION 3: RIWAYAT TRANSAKSI -->
     <section class="card">
       <div class="card-header">Riwayat Transaksi</div>
       <div class="table-responsive">
@@ -67,6 +72,7 @@
               <th>Dompet</th>
               <th>Kategori</th>
               <th>Jumlah</th>
+              <th>Keterangan</th> <!-- Kolom Baru -->
               <th>Aksi</th>
             </tr>
           </thead>
@@ -75,12 +81,13 @@
       </div>
     </section>
 
+    <!-- SECTION 4: LAPORAN BULANAN & GRAFIK -->
     <section class="card">
       <div class="card-header">Laporan Bulanan</div>
       <div class="form-group">
         <input type="month" id="filterBulan">
       </div>
-      <div id="loading" style="display:none; text-align:center; color: var(--text-muted); margin: 10px 0;">Memuat data database...</div>
+      <div id="loading" style="display:none; text-align:center; color: var(--text-muted); margin: 10px 0;">Memuat data...</div>
       <div class="chart-container">
         <div>
           <h3 class="chart-title">Pengeluaran</h3>
@@ -93,25 +100,35 @@
       </div>
     </section>
 
+    <!-- SECTION 5: PENGATURAN KATEGORI & WALLET -->
     <section class="card settings-card">
-      <div class="card-header">⚙️ Pengaturan Kustom</div>
+      <div class="card-header">⚙️ Kelola Kustomisasi</div>
+      
+      <!-- Kelola Kategori -->
       <div class="form-group">
-        <label>Tambah Kategori Baru</label>
+        <label>Kelola Kategori</label>
         <div class="inline-form">
-          <select id="addKatTipe">
+          <select id="manageKatTipe" onchange="renderManageLists()">
             <option value="Pengeluaran">Pengeluaran</option>
             <option value="Pemasukan">Pemasukan</option>
+            <option value="Transfer">Transfer</option>
           </select>
           <input type="text" id="newKatName" placeholder="Nama Kategori">
-          <button type="button" class="btn-small" onclick="tambahKategoriKustom()">+</button>
+          <button type="button" class="btn-small" onclick="tambahKategori()">+</button>
         </div>
+        <div class="manage-list" id="manageKatList"></div>
       </div>
+
+      <hr style="border: 1px solid var(--border-color); margin: 15px 0;">
+
+      <!-- Kelola Dompet -->
       <div class="form-group">
-        <label>Tambah Dompet Baru</label>
+        <label>Kelola Dompet</label>
         <div class="inline-form">
           <input type="text" id="newWalletName" placeholder="Nama Dompet">
-          <button type="button" class="btn-small" onclick="tambahDompetKustom()">+</button>
+          <button type="button" class="btn-small" onclick="tambahDompet()">+</button>
         </div>
+        <div class="manage-list" id="manageWalletList"></div>
       </div>
     </section>
   </div>

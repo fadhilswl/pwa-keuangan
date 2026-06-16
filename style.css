@@ -1,4 +1,3 @@
-/* VARIABEL TEMA DINAMIS DASAR */
 :root {
   --bg-color: #0d0e15;
   --card-bg: #161824;
@@ -22,12 +21,18 @@ body { background-color: var(--bg-color); color: var(--text-main); line-height: 
 header { text-align: center; margin: 20px 0 25px 0; }
 header h1 { font-size: 32px; font-weight: 700; letter-spacing: 1px; color: var(--pink-wallet); text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
 
+/* Edit Ikon & Wallet Card CSS Baru */
 .wallet-container { display: flex; gap: 12px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
 .wallet-card { flex: 1; min-width: 140px; padding: 16px; border-radius: 16px; position: relative; display: block; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 .wallet-card.cash { background: linear-gradient(135deg, #2c1a24, #1a0f15); border: 2px solid var(--pink-wallet); color: white !important; }
 .wallet-card.bank { background: linear-gradient(135deg, #2c2016, #1a130d); border: 2px solid var(--orange-wallet); color: white !important; }
 .wallet-card.custom { background: linear-gradient(135deg, #1f1b2c, #13101c); border: 2px solid var(--default-wallet); color: white !important; }
-.wallet-card p { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; margin-bottom: 4px; color: white; }
+
+.wallet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.wallet-header p { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; margin-bottom: 0; color: white; }
+.edit-icon { cursor: pointer; font-size: 14px; opacity: 0.5; transition: 0.2s; background: rgba(255,255,255,0.1); padding: 4px; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; }
+.edit-icon:hover { opacity: 1; transform: scale(1.1); background: rgba(255,255,255,0.2); }
+
 .wallet-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
 .wallet-card.cash h3 { color: var(--pink-wallet); }
 .wallet-card.bank h3 { color: var(--orange-wallet); }
@@ -43,24 +48,21 @@ label { display: block; font-size: 14px; color: var(--text-main); opacity: 0.8; 
 .radio-group input { display: none; }
 .radio-group label:has(input:checked) { background: var(--primary); color: #fff; opacity: 1; box-shadow: 0 4px 8px rgba(108, 92, 231, 0.4); }
 
-input[type="text"], input[type="number"], input[type="month"], select { width: 100%; padding: 12px; background: var(--input-bg); border: 2px solid var(--border-color); border-radius: 12px; color: var(--text-main); font-size: 15px; font-weight: 500; }
+input[type="text"], input[type="number"], input[type="date"], input[type="month"], select { width: 100%; padding: 12px; background: var(--input-bg); border: 2px solid var(--border-color); border-radius: 12px; color: var(--text-main); font-size: 15px; font-weight: 500; }
 input:focus, select:focus { outline: none; border-color: var(--primary); }
 input::placeholder { color: var(--text-main); opacity: 0.4; }
 
-/* Khusus Color Picker */
 .color-picker-input { width: 60px !important; padding: 0 !important; border: none !important; border-radius: 12px; cursor: pointer; background: transparent; height: 48px; }
 .color-picker-input::-webkit-color-swatch-wrapper { padding: 0; }
 .color-picker-input::-webkit-color-swatch { border: 2px solid var(--border-color); border-radius: 12px; }
 
 button[type="submit"] { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3); }
 
-/* Table & Full Row Colors */
 .table-responsive { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; font-weight: 500; }
 th { color: var(--text-main); opacity: 0.8; text-align: left; padding: 12px 10px; border-bottom: 2px solid var(--border-color); font-weight: 700; }
 td { padding: 14px 10px; border-bottom: 1px solid var(--border-color); }
 
-/* PENGEKUALIAN WARNA FUNGSIONAL (Override Text Main) */
 tr.row-expense td { color: var(--accent-red) !important; font-weight: 600; }
 tr.row-income td { color: var(--accent-green) !important; font-weight: 600; }
 tr.row-transfer td { color: var(--accent-yellow) !important; font-weight: 600; }

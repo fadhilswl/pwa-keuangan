@@ -1,11 +1,5 @@
-const CACHE_NAME = "finance-emoji-v7"; 
-const ASSETS = [ 
-  "./", 
-  "./index.html", 
-  "./style.css", 
-  "./script.js", 
-  "./manifest.json" 
-];
+const CACHE_NAME = "finance-datepicker-v8"; 
+const ASSETS = [ "./", "./index.html", "./style.css", "./script.js", "./manifest.json" ];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS)));

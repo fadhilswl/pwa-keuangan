@@ -1,4 +1,4 @@
-const CACHE_NAME = "finance-datepicker-v8"; 
+const CACHE_NAME = "finance-balance-editor-v9"; 
 const ASSETS = [ "./", "./index.html", "./style.css", "./script.js", "./manifest.json" ];
 
 self.addEventListener("install", (e) => {

@@ -1,44 +1,77 @@
 :root {
-  --bg-color: #f4f7f6;
-  --primary: #2c3e50;
-  --accent: #27ae60;
-  --danger: #e74c3c;
-  --card-bg: #ffffff;
-  --text: #333333;
+  --bg-color: #0d0e15;
+  --card-bg: #161824;
+  --text-main: #ffffff;
+  --text-muted: #7e84a3;
+  --primary: #6c5ce7;
+  --pink-wallet: #ff79c6;
+  --orange-wallet: #ff9f43;
+  --default-wallet: #a55eea;
+  --accent-green: #2ed573;
+  --accent-red: #ff4757;
+  --accent-blue: #54a0ff;
+  --border-color: #25283d;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
-body { background-color: var(--bg-color); color: var(--text); line-height: 1.6; padding-bottom: 30px; }
-.container { max-width: 600px; margin: 0 auto; padding: 20px; }
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; padding-bottom: 40px; }
+.container { max-width: 600px; margin: 0 auto; padding: 16px; }
 
-header { text-align: center; margin-bottom: 20px; color: var(--primary); }
-.card { background: var(--card-bg); padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
+header { text-align: center; margin: 20px 0 25px 0; }
+header h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
 
-/* Saldo Styles */
-.wallet-balances { display: flex; gap: 15px; }
-.wallet-card { flex: 1; background: var(--primary); color: white; padding: 15px; border-radius: 8px; text-align: center; }
-.wallet-card p { font-size: 12px; opacity: 0.8; margin-bottom: 5px; }
-.wallet-card h3 { font-size: 18px; }
+/* Wallet Layout */
+.wallet-container { display: flex; gap: 12px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
+.wallet-card { flex: 1; min-width: 140px; padding: 16px; border-radius: 14px; position: relative; display: block; }
+.wallet-card.cash { background: linear-gradient(135deg, #2c1a24, #1a0f15); border: 1px solid var(--pink-wallet); }
+.wallet-card.bank { background: linear-gradient(135deg, #2c2016, #1a130d); border: 1px solid var(--orange-wallet); }
+.wallet-card.custom { background: linear-gradient(135deg, #1f1b2c, #13101c); border: 1px solid var(--default-wallet); }
 
-.form-group { margin-bottom: 15px; }
-label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; }
-.radio-group { display: flex; gap: 10px; font-size: 13px; }
-input[type="text"], input[type="number"], input[type="month"], select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; }
+.wallet-card p { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 4px; }
+.wallet-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.wallet-card.cash h3 { color: var(--pink-wallet); }
+.wallet-card.bank h3 { color: var(--orange-wallet); }
+.wallet-card.custom h3 { color: var(--default-wallet); }
 
-button { width: 100%; padding: 12px; background-color: var(--accent); color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
-button:hover { background-color: #219653; }
-button:disabled { background-color: #95a5a6; cursor: not-allowed; }
+.wallet-actions { display: flex; gap: 5px; }
+.btn-action { background: rgba(255,255,255,0.06); color: #fff; border: none; padding: 4px 8px; font-size: 10px; border-radius: 4px; cursor: pointer; }
+.btn-action:hover { background: rgba(255,255,255,0.15); }
 
-.chart-container { display: flex; flex-direction: column; gap: 30px; }
-canvas { max-height: 250px; }
+/* UI Component Cards */
+.card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 16px; margin-bottom: 20px; }
+.card-header { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 15px; border-left: 3px solid var(--primary); padding-left: 8px; }
 
-/* Table Styles */
+.form-group { margin-bottom: 16px; }
+label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; }
+.radio-group { display: flex; background: #0d0e15; padding: 4px; border-radius: 8px; gap: 5px; }
+.radio-group label { flex: 1; text-align: center; margin: 0; padding: 8px; border-radius: 6px; cursor: pointer; color: var(--text-muted); font-size: 13px; }
+.radio-group input { display: none; }
+.radio-group label:has(input:checked) { background: var(--primary); color: #fff; }
+
+input[type="text"], input[type="number"], input[type="month"], select { width: 100%; padding: 12px; background: #0d0e15; border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-size: 15px; }
+input:focus, select:focus { outline: none; border-color: var(--primary); }
+
+button[type="submit"] { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; }
+button:disabled { opacity: 0.5; }
+
+/* Table Minimalis */
 .table-responsive { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 12px; }
-th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
-th { background-color: #f8f9fa; }
-.delete-btn { width: auto; padding: 5px 10px; font-size: 12px; background-color: var(--danger); }
-.delete-btn:hover { background-color: #c0392b; }
-.text-red { color: var(--danger); font-weight: bold; }
-.text-green { color: var(--accent); font-weight: bold; }
-.text-blue { color: #3498db; font-weight: bold; }
+th { color: var(--text-muted); text-align: left; padding: 10px; border-bottom: 1px solid var(--border-color); font-weight: 600; }
+td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.02); }
+.delete-btn { background: none; border: none; color: var(--accent-red); cursor: pointer; font-weight: 600; }
+
+.text-red { color: var(--accent-red); }
+.text-green { color: var(--accent-green); }
+.text-blue { color: var(--accent-blue); }
+
+/* Charts Layout */
+.chart-container { display: flex; flex-direction: column; gap: 25px; }
+.chart-title { text-align: center; font-size: 13px; color: var(--text-muted); margin-bottom: 5px; }
+canvas { max-height: 200px; }
+
+/* Settings Form */
+.inline-form { display: flex; gap: 8px; }
+.inline-form input, .inline-form select { flex: 1; padding: 8px; font-size: 13px; }
+.btn-small { background: var(--border-color); border: none; color: #fff; padding: 0 14px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+.settings-card { border-style: dashed; background: transparent; }

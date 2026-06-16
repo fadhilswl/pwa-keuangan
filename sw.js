@@ -1,4 +1,4 @@
-const CACHE_NAME = "finance-dark-v1"; // Naikkan versinya jika Anda merombak CSS/JS di masa depan
+const CACHE_NAME = "finance-fredoka-v2"; // Versi diperbarui untuk memaksa clear cache
 const ASSETS = [ "./", "./index.html", "./style.css", "./script.js", "./manifest.json" ];
 
 self.addEventListener("install", (e) => {
@@ -6,7 +6,7 @@ self.addEventListener("install", (e) => {
 });
 
 self.addEventListener("fetch", (e) => {
-  if (!e.request.url.includes('script.google.com')) {
+  if (!e.request.url.includes('script.google.com') && !e.request.url.includes('fonts.googleapis.com') && !e.request.url.includes('fonts.gstatic.com')) {
     e.respondWith(caches.match(e.request).then(res => res || fetch(e.request)));
   }
 });
